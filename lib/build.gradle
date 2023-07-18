@@ -1,0 +1,30 @@
+import mytasks.MyTask
+
+plugins {
+    id 'java-library'
+}
+
+repositories {
+    mavenCentral()
+}
+
+
+tasks.register("myTask", MyTask) {
+    // Property
+    myFirstProperty = "value" // ok
+    mySecondProperty = "value" // ok
+
+    // ConfigurableFileCollection
+    myCollection = files("hello") // myCollection is not recognized, but it should be
+    it.myCollection = files("hello") // myCollection is not recognized, but it should be
+    it.myCollection.setFrom(files("hello")) // ok
+    myCollection.setFrom(files("hello")) // ok
+}
+
+tasks.named("compileJava", JavaCompile) {
+    // Property
+    options.incrementalAfterFailure = true // Access to 'incrementalAfterFailure' exceeds its access rights
+    javaCompiler = javaToolchains.compilerFor { // Access to 'javaCompiler' exceeds its access rights
+        languageVersion = JavaLanguageVersion.of(11)
+    }
+}
